@@ -22,8 +22,8 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
-        productName: 'Do not laugh',
-        appId: 'xyz.andypotato.demo.donotlaugh',
+        productName: 'joyful_electron',
+        appId: 'xyz.andypotato.demo.joyful_electron',
         linux: {
           target: {
             target: 'appimage',
