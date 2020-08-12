@@ -1,24 +1,6 @@
-# joyful_electron
+# Joyful depression
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## based on "do-not-laugh"
+MIT License
+2019 Andreas Schallwig
+https://github.com/andypotato/do-not-laugh
