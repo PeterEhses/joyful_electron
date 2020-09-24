@@ -50,6 +50,15 @@
     <div class="">
       <p>If we would send a payload right now it would go to <code>{{paylaodAddress}}</code></p>
     </div>
+    <br>
+    <div class="">
+      <p>Watchdog Time Difference: {{timediff}}</p>
+      <label>
+        Watchidog Timer Threshold:
+        <input type="range" min="50" max="50000" value="watchdogThreshold" class="slider" id="myRange" v-model="watchdogThreshold"> {{watchdogThreshold}}
+      </label>
+      <p>D > T = {{timediff>watchdogThreshold}}</p>
+    </div>
     <div id="sendstatus" ref="statusBoi">
 
     </div>
@@ -66,6 +75,8 @@ export default {
   name: 'Main',
   data() {
     return {
+      timediff: 0,
+      watchdogThreshold: 20*1000,
       addressNumbers: {
         angry: 1,
         disgusted: 2,
@@ -148,6 +159,28 @@ export default {
     }
   },
   methods: {
+    expressionHistInit(){
+      for (const [key, value] of Object.entries(this.expressionsHistory)) {
+        this.expressionsHistory[key] = Array(this.expressionsHistorySize).fill(0)
+      }
+      this.expressionsHistory.neutral[0] = .3;
+    },
+    doWatchdogUpdate(){
+      this.$watchdogLastMillis = Date.now();
+    },
+    doWatchdogCheck(){
+      if(typeof(this.$watchdogLastMillis) !== 'undefined'){
+        let timediff = Date.now() - this.$watchdogLastMillis
+        this.timediff = timediff;
+      }
+    },
+    doWatchdogStart(tr){
+      this.watchdogThreshold = tr;
+      //this.doWatchdogCheck()
+      let _this = this
+      this.$watchdogIntervalID = setInterval(()=>{_this.doWatchdogCheck()}, 1500) // TODO figure out how to set this in relation to threshold maybe
+      console.log("setup:", this.$watchdogIntervalID)
+    },
     initCamera: async function(width, height) {
       // create cam reference
       let cam = this.$refs.cam;
@@ -203,12 +236,18 @@ export default {
           this.expressionsHistory[key].shift()
 
       }
+      this.doWatchdogUpdate();
       this.expressions = expressions;
     }
   },
   watch: {
+    timediff(){
+      if(this.timediff > this.watchdogThreshold){
+        this.expressionHistInit();
+      }
+
+    },
     expressionsHistorySize: function(){
-      console.log(this.expressionsHistory["neutral"].length)
         for(const [key, value] of Object.entries(this.expressionsHistory)){
           if(this.expressionsHistory[key].length < this.expressionsHistorySize){
             let addthis = Array(this.expressionsHistorySize-this.expressionsHistory[key].length).fill(0)
@@ -222,11 +261,9 @@ export default {
 
   mounted() {
 
+    this.doWatchdogStart(20*1000);
+    this.expressionHistInit();
 
-
-    for (const [key, value] of Object.entries(this.expressionsHistory)) {
-      this.expressionsHistory[key] = Array(this.expressionsHistorySize).fill(0)
-    }
 
     //console.dir(this.$udpPort);
     let testpayload = {

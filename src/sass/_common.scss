@@ -1,6 +1,9 @@
 * {
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: subpixel-antialiased;
   box-sizing: border-box;
   user-select: none;
+  backface-visibility: hidden;
 }
 
 html, body {
@@ -18,14 +21,49 @@ body {
   color: #fafafa;
 }
 
+// scrollbar
+
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #222;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #7D7D7D;
+  margin: 2px;
+  border: 2px solid #222;
+  border-radius: 12345px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #fafafa;
+}
+
+::-webkit-resizer,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
+
+
+// end scrollbar
+
 .page {
   //width: 1024px;
   //height: 768px;
   position: absolute;
   overflow: hidden;
-  top: 50%;
+  //top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
 }
 
 .page-enter-active,
